@@ -1,16 +1,24 @@
-# This is a sample Python script.
+from vertex import Vertex
+from edge import Edge
+from Graph import *
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+v1 = Vertex(1)
+v2 = Vertex(2)
+v3 = Vertex(3)
+v4 = Vertex(4)
+v5 = Vertex(5)
 
+vertex_set = {v1, v2, v3, v4, v5}
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+edge_set = {
+    Edge(v1,v2),
+    Edge(v2,v3),
+    Edge(v1,v3),
+    Edge(v1,v4),
+    Edge(v3,v4),
+    Edge(v3,v5)
+}
 
+g = UndirectedGraph(vertex_set,edge_set)
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+g.print_adjacency_list()
