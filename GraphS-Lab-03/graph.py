@@ -40,7 +40,7 @@ class Graph(ABC):
 
     def get_neighbors(self, vertex: Vertex) -> List[Vertex]:
         if vertex in self.vertices:
-            return self.adj_dict[vertex.data]
+            return self.adj_dict[vertex]
         else:
             print(f"ERROR VERTEX {vertex} NOT IN GRAPH")
             return []
@@ -55,27 +55,29 @@ class Graph(ABC):
 
 class UndirectedGraph(Graph):
     def prim_MST(self, source: Vertex) -> Graph:
-        heap = MinHeap(self.get_vertex_dictionary_prim(source))
-        parent_dict: Dict[Vertex, Vertex] = {}
+        heap = MinHeap(self.get_vertex_dictionary_prim(source))  # heap contains all vertices but with different
+        # "weights" to vertex from connected component
+        parent_dict: Dict[Vertex, Vertex] = {}  # parent to remember who's the node connected to min_vertex that
+        # gave it the minweight
         mst_set = set()
         edge_set = set()
         mst_set.add(source)
 
-        while len(mst_set) != len(self.vertices):
-            min_weight_vertex = heap.get_and_remove_minimum()
+        while len(mst_set) != len(self.vertices):  # while mst_set doesn't contain all vertices O(V)
+            min_weight_vertex = heap.get_and_remove_minimum()  # least "weight" to reach a new node
             if min_weight_vertex not in mst_set:
-                mst_set.add(min_weight_vertex)
-                edge_set.add(self.get_edge(parent_dict[min_weight_vertex], min_weight_vertex))
+                mst_set.add(min_weight_vertex) # connect to component
+                edge_set.add(self.get_edge(parent_dict[min_weight_vertex], min_weight_vertex))  # edge
 
             #  need to add the new adj_vertices to heap dict
-            adj_vertices = self.adj_dict[min_weight_vertex]
-            for adj_v in adj_vertices:
-                if adj_v not in mst_set:
+            adj_vertices = self.get_neighbors(min_weight_vertex)
+            for adj_v in adj_vertices:  # adjacent vertices to newly added vertex
+                if adj_v not in mst_set:  # if not already there
                     cost = self.get_edge_cost(min_weight_vertex, adj_v)
                     if cost < heap.dictionary[adj_v]:
                         heap.dictionary[adj_v] = cost
                         parent_dict[adj_v] = min_weight_vertex
-                        heap.build_min_heap()
+                        heap.build_min_heap()  # to rebuild heap
         return UndirectedGraph(mst_set, edge_set)
 
     def _load_adjacency_list(self):
