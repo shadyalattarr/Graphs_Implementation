@@ -15,21 +15,19 @@ class MinHeap:
         self.heap_size = len(dictionary)
         self.build_min_heap()
 
-    def decrease_key(self, vertex, new_value):
-        if new_value < self.dictionary[vertex]:
-            self.dictionary[vertex] = new_value
-            self._bubble_up(self.positions[vertex])
+    # def decrease_key(self, vertex):
+    #         self._bubble_up(self.positions[vertex])
 
-    def _bubble_up(self, index):
-        while index > 0:
-            parent_index = (index - 1) // 2
-            if self.dictionary[self.heap[index]] < self.dictionary[self.heap[parent_index]]:
-                self.heap[index], self.heap[parent_index] = self.heap[parent_index], self.heap[index]
-                self.positions[self.heap[index]] = index
-                self.positions[self.heap[parent_index]] = parent_index
-                index = parent_index
-            else:
-                break
+    # def _bubble_up(self, index):
+    #     while index > 0:
+    #         parent_index = (index - 1) // 2
+    #         if self.dictionary[self.heap[index]] < self.dictionary[self.heap[parent_index]]:
+    #             self.heap[index], self.heap[parent_index] = self.heap[parent_index], self.heap[index]
+    #             self.positions[self.heap[index]] = index
+    #             self.positions[self.heap[parent_index]] = parent_index
+    #             index = parent_index
+    #         else:
+    #             break
 
     def build_min_heap(self):
         for i in range((self.heap_size // 2) - 1, -1, -1):  # to start minheapification from last parent

@@ -21,14 +21,17 @@ class Graph(ABC):
     @abstractmethod
     def _load_adjacency_list(self) -> Dict[Vertex, List[Vertex]]:
         pass
-
     def Dijkstra(self, src: Vertex):
         heap = MinHeap(self.get_vertex_dictionary_prim(src))
         while not heap.isEmpty():
             min_weight_vertex = heap.get_and_remove_minimum()
+            # print(heap.dictionary)
+            # print(heap.heap)
             for adj_v in self.get_neighbors(min_weight_vertex):
                 newDistance = heap.dictionary[min_weight_vertex] + self.get_edge_cost(min_weight_vertex, adj_v)
-                heap.decrease_key(adj_v, newDistance)
+                if newDistance < heap.dictionary.get(adj_v, float('infinity')):
+                    heap.dictionary[adj_v] = newDistance
+                    heap.build_min_heap()
         return heap.dictionary
 
     # wont use?
@@ -160,10 +163,11 @@ class DirectedGraph(Graph):
         # adjacency list is adj_dictionary
         adj_dictionary = {}  # empty dictionary
         for vertex in self.vertices:
-            adj_dictionary[vertex.data] = []
+            adj_dictionary[vertex] = []
             for edge in self.edges:
                 if vertex in edge.vertices_pair and vertex == edge.vertices_pair[0]:  # from the vertex--only difference
-                    adj_dictionary[vertex.data].append(edge.vertices_pair[1])  # list of the vertex's neighbors
+                    adj_dictionary[vertex].append(edge.vertices_pair[1])  # list of the vertex's neighbors
+            
         return adj_dictionary
     
     def get_edge(self, src: Vertex, dest: Vertex):
