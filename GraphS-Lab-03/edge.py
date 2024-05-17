@@ -11,3 +11,6 @@ class Edge:
 
     def __repr__(self):
         return f"{self.vertices_pair} - {self.weight}"
+    
+    def returnEdge(self):
+        return self.vertices_pair[0], self.vertices_pair[1], self.weight 
