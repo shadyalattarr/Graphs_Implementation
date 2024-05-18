@@ -21,6 +21,15 @@ class Graph(ABC):
     @abstractmethod
     def _load_adjacency_list(self) -> Dict[Vertex, List[Vertex]]:
         pass
+
+    @abstractmethod
+    def get_edge(self, vertex_a: Vertex, vertex_b: Vertex):
+        pass
+
+    @abstractmethod
+    def get_edge_cost(self, vertex_a, vertex_b) -> int:
+        pass
+
     def Dijkstra(self, src: Vertex):
         heap = MinHeap(self.get_vertex_dictionary_prim(src))
         while not heap.isEmpty():
@@ -70,7 +79,7 @@ class Graph(ABC):
         if parent[i] == i:
             return i
         return self.find(parent, parent[i])
-    
+
     def union(self, parent, rank, x, y):
         xRoot = self.find(parent, x)
         yRoot = self.find(parent, y)
@@ -87,26 +96,24 @@ class UndirectedGraph(Graph):
 
     def Kruskal_MST(self):
         edges_list = list(self.edges)
-        sorted_edges  = sorted(edges_list, key=lambda edge: edge.weight)
+        sorted_edges = sorted(edges_list, key=lambda edge: edge.weight)
         result = []
-        parent_dict: Dict[Vertex, Vertex] = {} 
-        rank: Dict[Vertex, int] = {} 
+        parent_dict: Dict[Vertex, Vertex] = {}
+        rank: Dict[Vertex, int] = {}
         for node in self.vertices:
             parent_dict[node] = node
             rank[node] = 0
-        i=0
-        while i<len(self.edges):
+        i = 0
+        while i < len(self.edges):
             u, v, weight = sorted_edges[i].returnEdge()
-            i+=1
+            i += 1
             x = self.find(parent_dict, u)
             y = self.find(parent_dict, v)
             if x != y:
                 result.append(Edge(u, v, weight))
                 self.union(parent_dict, rank, x, y)
 
-        return UndirectedGraph(self.vertices, result)
-
-
+        return UndirectedGraph(self.vertices, set(result))
 
     def prim_MST(self, source: Vertex) -> Graph:
         heap = MinHeap(self.get_vertex_dictionary_prim(source))  # heap contains all vertices but with different
@@ -120,7 +127,7 @@ class UndirectedGraph(Graph):
         while len(mst_set) != len(self.vertices):  # while mst_set doesn't contain all vertices O(V)
             min_weight_vertex = heap.get_and_remove_minimum()  # least "weight" to reach a new node
             if min_weight_vertex not in mst_set:
-                mst_set.add(min_weight_vertex) # connect to component
+                mst_set.add(min_weight_vertex)  # connect to component
                 edge_set.add(self.get_edge(parent_dict[min_weight_vertex], min_weight_vertex))  # edge
 
             #  need to add the new adj_vertices to heap dict
@@ -142,15 +149,15 @@ class UndirectedGraph(Graph):
             for edge in self.edges:
                 if vertex in edge.vertices_pair:
                     adj_dictionary[vertex].append(edge.vertices_pair[0] if edge.vertices_pair[0] != vertex
-                                                else edge.vertices_pair[1])  # list of the vertex's neighbors
+                                                  else edge.vertices_pair[1])  # list of the vertex's neighbors
         return adj_dictionary
-    
+
     def get_total_cost(self):
         total_cost = 0
         for vertex, adjacent_vertices in self.adj_dict.items():
             for i in adjacent_vertices:
-                total_cost += self.get_edge_cost(vertex,i)
-        return total_cost//2
+                total_cost += self.get_edge_cost(vertex, i)
+        return total_cost // 2
 
     def get_edge(self, vertex_a: Vertex, vertex_b: Vertex):
         for edge in self.edges:
@@ -175,9 +182,9 @@ class DirectedGraph(Graph):
             for edge in self.edges:
                 if vertex in edge.vertices_pair and vertex == edge.vertices_pair[0]:  # from the vertex--only difference
                     adj_dictionary[vertex].append(edge.vertices_pair[1])  # list of the vertex's neighbors
-            
+
         return adj_dictionary
-    
+
     def get_edge(self, src: Vertex, dest: Vertex):
         for edge in self.edges:
             vertices = edge.vertices_pair
