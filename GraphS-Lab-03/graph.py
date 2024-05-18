@@ -59,6 +59,7 @@ class Graph(ABC):
             return []
 
     def print_adjacency_list(self):
+        total_cost = 0
         for vertex, adjacent_vertices in self.adj_dict.items():
             print(f"{vertex}: [", end='')
             for i in adjacent_vertices:
@@ -143,6 +144,13 @@ class UndirectedGraph(Graph):
                     adj_dictionary[vertex].append(edge.vertices_pair[0] if edge.vertices_pair[0] != vertex
                                                 else edge.vertices_pair[1])  # list of the vertex's neighbors
         return adj_dictionary
+    
+    def get_total_cost(self):
+        total_cost = 0
+        for vertex, adjacent_vertices in self.adj_dict.items():
+            for i in adjacent_vertices:
+                total_cost += self.get_edge_cost(vertex,i)
+        return total_cost//2
 
     def get_edge(self, vertex_a: Vertex, vertex_b: Vertex):
         for edge in self.edges:
