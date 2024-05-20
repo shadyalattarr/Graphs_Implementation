@@ -124,7 +124,7 @@ class UndirectedGraph(Graph):
         edge_set = set()
         mst_set.add(source)
 
-        while len(mst_set) != len(self.vertices):  # while mst_set doesn't contain all vertices O(V)
+        while len(mst_set) != len(self.vertices):  # while mst_set doesn't contain all vertices O(V)THIS E???
             min_weight_vertex = heap.get_and_remove_minimum()  # least "weight" to reach a new node
             if min_weight_vertex not in mst_set:
                 mst_set.add(min_weight_vertex)  # connect to component
@@ -132,7 +132,7 @@ class UndirectedGraph(Graph):
 
             #  need to add the new adj_vertices to heap dict
             adj_vertices = self.get_neighbors(min_weight_vertex)
-            for adj_v in adj_vertices:  # adjacent vertices to newly added vertex
+            for adj_v in adj_vertices:  # adjacent vertices to newly added vertex--EE/
                 if adj_v not in mst_set:  # if not already there
                     cost = self.get_edge_cost(min_weight_vertex, adj_v)
                     if cost < heap.dictionary[adj_v]:

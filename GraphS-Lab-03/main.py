@@ -74,7 +74,6 @@ from graph import *
 # dict_ = g2.Dijkstra(v0)
 # for vertex in vertex_set:
 #     print(f"Shortest distance from Source({v0}) and {vertex}: {dict_[vertex]}")
-    
 
 
 # v1 = Vertex(1)
@@ -105,7 +104,7 @@ from graph import *
 # print("------")
 # for vertex in vertex_set:
 #     print(f"Shortest distance from Source({v1}) and {vertex}: {dijkstra_dict[vertex]}")
-    
+
 
 # v_set2 = {v0, v1, v2, v3, v4}
 # e_set2 = {
@@ -155,9 +154,7 @@ g = UndirectedGraph(vertex_set, edge_set)
 mst = g.prim_MST(a)
 print("------")
 mst.print_adjacency_list()
-print(mst.get_total_cost())
-
-
+# ------------------------------------------------------- #
 s = Vertex("s")
 t = Vertex("t")
 y = Vertex("y")
